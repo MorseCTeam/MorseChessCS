@@ -1,25 +1,22 @@
 ﻿using Raylib_cs;
+using System.Numerics;
 
 namespace MorseChessCS
 {
-    abstract class Piece : IDrawable
+    public abstract class Piece
     {
-        protected int piecePointValue;
-        protected PieceColor pieceColor;
-        protected PieceName pieceName;
-        protected Texture2D pieceTexture;
-        protected string pieceKey;
+        protected int pointValue;
+        public PieceColor Color { get; protected set; }
+        public PieceType Type { get; protected set; }
+        public Texture2D Texture{ get; protected set; }
 
-
-        public enum PieceColor
+     public enum PieceColor
         {
             White,
             Black
         }
-
-        protected string[] stringColor = { "White", "Black" };
-
-        public enum PieceName
+     
+        public enum PieceType
         {
             Pawn,
             Rook,
@@ -29,17 +26,9 @@ namespace MorseChessCS
             King
         }
 
-        protected string[] stringName = { "Pawn", "Rook", "Knight", "Bishop", "Queen", "King" };
+        
+        public abstract List<Vector2> GetPossibleMoves(Vector2 mousePosition);
 
-        public PieceColor getPieceColor()
-        {
-            return pieceColor;
-        }
-
-        public void Draw()
-        {
-
-        }
     }
 
 }
