@@ -12,6 +12,17 @@ namespace MorseChessCS
             Texture = GameManager.PieceTextures[Color.ToString() + Type.ToString()];
         }
 
+        public override object Clone()
+        {
+            return new Rook(Color)
+            {
+                pointValue = 5,
+                Color = Color,
+                Type = PieceType.Rook,
+                Texture = GameManager.PieceTextures[Color.ToString() + Type.ToString()]
+            };
+        }
+
         public override List<Vector2> GetPossibleMoves(Vector2 mousePosition)
         {
             List<Vector2> possibleMoves = new();
