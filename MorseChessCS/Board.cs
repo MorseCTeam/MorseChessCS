@@ -1,4 +1,5 @@
 ﻿using Raylib_cs;
+using System.Linq;
 using System.Numerics;
 
 namespace MorseChessCS
@@ -20,20 +21,16 @@ namespace MorseChessCS
 
         public Vector2 size = new(100, 100);
 
+        private int Turn = 0;
+
         public Board()
         {
-            for (int x = 0; x < 8; x++)
-            {
-                for (int y = 2; y < 6; y++)
-                {
-                    pieces[x, y] = null;
-                }
-            }
-            SetPieces();
+         
         }
 
         public void SetPieces()
         {
+
             Piece.PieceColor WHITE = Piece.PieceColor.White;
             Piece.PieceColor BLACK = Piece.PieceColor.Black;
             for (int x = 0; x < 8; x++)
@@ -82,16 +79,17 @@ namespace MorseChessCS
         {
             if (Raylib.IsMouseButtonPressed(0))
             {
-                if (GetClickedPiece() != null && ReferenceEquals(selectedPiece, GetClickedPiece()))
+                if (GetClickedPiece() != null && ReferenceEquals(selectedPiece, GetClickedPiece()) && (int)GetClickedPiece().Color == Turn % 2)
                 {
                     selectedPiece = null;
                     selectedPiecePosition = Vector2.Zero;
                 }
-                else if (GetClickedPiece() != null && !ReferenceEquals(selectedPiece, GetClickedPiece()))
+                else if (GetClickedPiece() != null && !ReferenceEquals(selectedPiece, GetClickedPiece()) && (int)GetClickedPiece().Color == Turn % 2)
                 {
                     selectedPiece = GetClickedPiece();
                     selectedPiecePosition = Raylib.GetMousePosition();
-                } else
+                } 
+                else
                 {
                     selectedPiece = null;
                     selectedPiecePosition = Vector2.Zero;
@@ -102,6 +100,18 @@ namespace MorseChessCS
         public bool IsFieldOccupied(int x, int y)
         {
             return pieces[x, y] is not null;
+        }
+
+        public void MoveSelectedPiece()
+        {
+            int x = Raylib.GetMouseX() / 100;
+            int y = Raylib.GetMouseY() / 100;
+            if (selectedPiece.GetPossibleMoves(selectedPiecePosition).Contains(new Vector2(x, y)))
+            {
+                pieces[x, y] = (Piece)selectedPiece.Clone();
+                pieces[(int)selectedPiecePosition.X / 100, (int)selectedPiecePosition.Y / 100] = null;
+            }
+            Turn++;
         }
 
         public void Draw()
@@ -124,6 +134,7 @@ namespace MorseChessCS
                     if (pieces[(int)vector.X, (int)vector.Y] is not null)
                     {
                         Raylib.DrawRectangleV(GameManager.FieldToScreenPosition(vector), size, OccupiedSpaceColor);
+                        //Raylib.DrawCircleV(GameManager.FieldToCircleScreenPosition(vector), fieldLength * 0.475f, OccupiedSpaceColor);
                     }
                     else
                     {
