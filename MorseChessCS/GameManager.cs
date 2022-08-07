@@ -32,5 +32,10 @@ namespace MorseChessCS
         {
             return new Vector2(vector.X * FieldLength, vector.Y * FieldLength);
         }
+
+        public static Vector2 FieldToCircleScreenPosition(Vector2 vector)
+        {
+            return new Vector2(vector.X * FieldLength + FieldLength / 2, vector.Y * FieldLength + FieldLength / 2);
+        }
     }
 }
