@@ -9,8 +9,9 @@ namespace MorseChessCS
         public PieceColor Color { get; protected set; }
         public PieceType Type { get; protected set; }
         public Texture2D Texture{ get; protected set; }
+        public Board board { get; init; } = GameManager.Board;
 
-     public enum PieceColor
+        public enum PieceColor
         {
             White,
             Black
@@ -28,6 +29,8 @@ namespace MorseChessCS
 
         
         public abstract List<Vector2> GetPossibleMoves(Vector2 mousePosition);
+
+        public abstract object Clone();
 
     }
 
