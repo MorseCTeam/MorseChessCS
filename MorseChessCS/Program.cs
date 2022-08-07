@@ -1,4 +1,6 @@
 ﻿using Raylib_cs;
+using System.Linq;
+using System.Numerics;
 
 namespace MorseChessCS
 {
@@ -14,13 +16,16 @@ namespace MorseChessCS
             Board board = new();
             GameManager.Board = board;
             drawables.Add(board);
-
-            board.pieces[6, 2] = new Rook(Piece.PieceColor.White);
+            board.SetPieces();
 
             while (!Raylib.WindowShouldClose())
             {
                 Raylib.BeginDrawing();
                 Raylib.ClearBackground(Color.BLACK);
+                if (board.selectedPiece is not null && Raylib.IsMouseButtonPressed(0) && board.selectedPiece.GetPossibleMoves(board.selectedPiecePosition).Contains(new Vector2((int)Raylib.GetMouseX() / GameManager.FieldLength, (int)Raylib.GetMouseY() / GameManager.FieldLength)))
+                {
+                    board.MoveSelectedPiece();
+                }
                 if (Raylib.IsMouseButtonPressed(0))
                 {
                     board.SelectPiece();
